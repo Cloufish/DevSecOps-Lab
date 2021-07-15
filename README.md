@@ -8,4 +8,5 @@ A DevSecOps Lab, that helps to learn 'Activities' described in DSOMM (DevSecOps 
 
 ## TODO
 - [ ] Setup Script to Autogenerate RSA Keys for the servers and copy them into Vagrant Main Server
+  - [ ] Actually this can be done with `vagrant provision` 
 - [ ] Learn how to parse the contents of Inventory Files to perform better automation
