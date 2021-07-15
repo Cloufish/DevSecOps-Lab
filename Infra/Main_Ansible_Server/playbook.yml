@@ -1,0 +1,27 @@
+---
+- name: Setting Up Ansible Main Server to Manage other Instances
+  hosts: ansible_main_server
+  remote_user: vagrant
+  become: true
+  vars_files:
+    - ../../ansible/vars/directory_variables.yml
+
+  tasks:
+
+  - name: Ensure Ansible dependencies are installed
+    apt:
+      name: ansible
+      state: present
+
+  - name: Create new user 'ansible'
+    user:
+      name: ansible
+      comment: Ansible Account To Manage Other VMs
+      uid: 1040
+      group: ansible
+    become_user: ansible
+
+  - name: Copy the Ansible Folder (Configs) to Vagrant Box
+    copy:
+      src: "{{ ansible_root_directory }}"
+      dst: /home/ansible/
