@@ -1,2 +1,2 @@
-[git-server]
-192.168.33.13 ansible_ssh_port=22 ansible_ssh_user=vagrant ansible_ssh_private_key_file=~/.ssh/id_rsa
+[ansible_main_server]
+192.168.10.2
