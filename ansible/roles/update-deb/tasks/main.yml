@@ -1,0 +1,5 @@
+---
+- name: Make sure everything's up to date
+  apt:
+    upgrade: dist
+    update_cache: yes

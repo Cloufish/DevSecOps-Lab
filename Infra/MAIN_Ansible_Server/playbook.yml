@@ -8,11 +8,31 @@
 
   tasks:
 
+  - name: Generate the key for Machines
+    command: ssh-keygen -t ed25519 -C "ansible" -f $HOME/.ssh/ansible_key
+    delegate_to: 127.0..0.1
+
+  - name: set permissions for .ssh directory
+    file: path=/home/sahil/.ssh 
+    mode=0700
+
+  - name: create authorized_keys file
+    file: path=/home/sahil/.ssh/authorized_keys state=touch mode=0644
+
+  - name: Copy the private key to the Ansible Management Machine
+    copy:
+      src: $HOME/.ssh/ansible_key
+      dest: $HOME/.ssh/ansible_key
+
   - name: Ensure Ansible dependencies are installed
     apt:
       name: ansible
       state: present
 
+  - name: Make sure vagrant is installed
+    apt:
+      name: vagrant
+      state: present
   # - name: Create new user 'ansible'
   #   user:
   #     name: ansible
@@ -21,7 +41,14 @@
   #     group: ansible
   #   become_user: ansible
 
-  - name: Copy the Ansible Folder (Configs) to Vagrant Box
+  - name: Copy the private SSH Key to the Ansible Management Server
+
+  - name: Copy the Ansible Folder (Configs) to Ansible Management Server
     copy:
       src: "{{ ansible_root_directory }}"
       dest: /etc
+
+  - name: Copy the Infra/ Directory of the machines to Ansible Management Server
+    copy:
+      src: "{{ ansible_root_directory }}/../Infra/"
+      dest: $HOME

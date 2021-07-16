@@ -1,0 +1,21 @@
+---
+- hosts: all
+  become: true
+  become_method: sudo
+  vars_files:
+  - vars/local.yml
+
+  tasks:
+    - name: "Ensure python-pip is installed"
+      apt:
+        name: python-pip
+        state: present
+
+    - name: "Ensure pymysql is installed"
+      command: pip install pymysql
+  roles:
+    - geerlingguy.nginx
+    - geerlingguy.mysql
+    - geerlingguy.php
+    - app.source
+    - app.phpmyadmin
