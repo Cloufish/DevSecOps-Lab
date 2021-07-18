@@ -1,2 +1,8 @@
 ---
 # tasks file for ssh.copy
+
+- name: Copy the public key to the Machines
+  copy:
+    src: "{{ localhost_homedir }}/.ssh/ansible_key.pub"
+    dest: "{{ ansible_env.HOME }}/.ssh/ansible_key.pub"
+  become: false

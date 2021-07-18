@@ -2,27 +2,23 @@
 - name: Setting Up Ansible Main Server to Manage other Instances
   hosts: ansible_main_server
   remote_user: vagrant
-  become: true
+ # become: true
   vars_files:
-    - ../../ansible/vars/directory_variables.yml
+    - ../../ansible/group_vars/all/directory_variables.yml
+  strategy: debug
 
   tasks:
 
-  - name: Generate the key for Machines
-    command: ssh-keygen -t ed25519 -C "ansible" -f $HOME/.ssh/ansible_key
-    delegate_to: 127.0..0.1
-
-  - name: set permissions for .ssh directory
-    file: path=/home/sahil/.ssh 
-    mode=0700
-
-  - name: create authorized_keys file
-    file: path=/home/sahil/.ssh/authorized_keys state=touch mode=0644
+ # - name: Generate the key for Machines
+  #  command: ssh-keygen -b 2048 -t rsa -q -N "" -f $HOME/.ssh/ansible_key
+   # delegate_to: localhost
+    #become: false
+   # ignore_errors: yes
 
   - name: Copy the private key to the Ansible Management Machine
     copy:
-      src: $HOME/.ssh/ansible_key
-      dest: $HOME/.ssh/ansible_key
+      src: "{{ localhost_homedir }}/.ssh/ansible_key"
+      dest: "{{ ansible_env.HOME }}/.ssh/ansible_key"
 
   - name: Ensure Ansible dependencies are installed
     apt:
@@ -41,13 +37,18 @@
   #     group: ansible
   #   become_user: ansible
 
-  - name: Copy the private SSH Key to the Ansible Management Server
-
   - name: Copy the Ansible Folder (Configs) to Ansible Management Server
     copy:
       src: "{{ ansible_root_directory }}"
       dest: /etc
+    become: yes
 
+  - name: Copy the ~/.vagrant.d directory with insecure key
+    copy:
+      src: "{{ localhost_homedir }}/.vagrant.d"
+      dest: "{{ ansible_env.HOME }}"
+
+      
   - name: Copy the Infra/ Directory of the machines to Ansible Management Server
     copy:
       src: "{{ ansible_root_directory }}/../Infra/"

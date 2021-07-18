@@ -1,2 +1,3 @@
 ---
 ansible_root_directory: ../../ansible
+localhost_homedir: /home/cloufish

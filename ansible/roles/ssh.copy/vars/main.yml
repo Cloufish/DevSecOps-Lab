@@ -1,2 +1,3 @@
 ---
 # vars file for ssh.copy
+localhost_homedir: /home/cloufish

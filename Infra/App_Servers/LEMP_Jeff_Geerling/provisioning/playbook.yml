@@ -11,6 +11,7 @@
     - vars/main.yml
 
   roles:
+    - ssh.copy
     - geerlingguy.firewall
     - geerlingguy.repo-epel
     - geerlingguy.repo-remi

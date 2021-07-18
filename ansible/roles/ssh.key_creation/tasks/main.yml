@@ -1,20 +1,15 @@
 ---
 # tasks file for ssh.key_creation
 - name: Creation of SSH Keys
-  hosts: localhost
-  connection: local
+  hosts: ansible_main_server
 
   tasks:
   - name: Generate the key for Machines
     command: ssh-keygen -t ed25519 -C "ansible" -f $HOME/.ssh/ansible_key
     delegate_to: 127.0..0.1
 
-  - name: set permissions for .ssh directory
-    file: path=/home/sahil/.ssh 
-    
-
   - name: create authorized_keys file
-    file: path=/home/sahil/.ssh/authorized_keys state=touch mode=0644
+    file: path=$HOME/.ssh/authorized_keys state=touch mode=0644
 
   - name: Copy the private key to the Ansible Management Machine
     copy:

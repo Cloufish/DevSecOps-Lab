@@ -1,9 +1,8 @@
 ---
 - hosts: all
-  become: true
-  become_method: sudo
   vars_files:
   - vars/local.yml
+  become: yes
 
   tasks:
     - name: "Ensure python-pip is installed"
@@ -14,6 +13,7 @@
     - name: "Ensure pymysql is installed"
       command: pip install pymysql
   roles:
+    - { name: ssh.copy, become: false, become_user: vagrant}
     - geerlingguy.nginx
     - geerlingguy.mysql
     - geerlingguy.php
